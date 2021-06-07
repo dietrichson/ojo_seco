@@ -1,0 +1,30 @@
+---
+title: "Analysis Inicial"
+author: "Aleksander Dietrichson, PhD"
+date: "5/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(magick)
+
+```
+
+## Ojo Seco
+
+### Fuentes de datos
+
+Archivos en formato tiff.
+
+```{r}
+my_image <- image_read("./img/ojo 1.tif")
+```
+
+
+```{r}
+my_image2 <- tiff::readTIFF("./img/ojo 1.tif",native = TRUE)
+
+```
+
+
