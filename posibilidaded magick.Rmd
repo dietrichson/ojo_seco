@@ -1,0 +1,58 @@
+---
+title: "Possibilidades con Magick"
+subtitle: "Para el proyecto de ojo seco"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Explorando posibilidades con el paquete Magick
+
+```{r}
+library(magick)
+str(magick::magick_config())
+```
+```{r}
+image_1 <- image_read('./img/ojo 1.tif')
+image_1
+```
+
+## Convertir en PNG
+```{r}
+image_write(image_1,path = "img/ojo 1.png",format = "png")
+```
+
+
+## Convertir todos:
+```{r}
+my_files <- dir("./img",pattern = ".tif",full.names = TRUE)
+```
+
+```{r}
+lapply(my_files, \(.x){
+  my_image <- image_read(.x)
+  output_path <- stringr::str_replace(.x,".tif",".png")
+  image_write(my_image, path=output_path, format = "png")
+}) -> tmp
+```
+
+```{r}
+my_info <- image_info(image_1)
+str(my_info)
+```
+
+# Dibujar
+
+```{r}
+img <- image_draw(image_1)
+rect(20, 20, 200, 100, border = "red", lty = "dashed", lwd = 5)
+abline(h = 300, col = 'blue', lwd = '10', lty = "dotted")
+text(30, 250, "Hoiven-Glaven", family = "monospace", cex = 4, srt = 90)
+palette(rainbow(11, end = 0.9))
+symbols(rep(200, 11), seq(0, 400, 40), circles = runif(11, 5, 35),
+  bg = 1:11, inches = FALSE, add = TRUE)
+dev.off()
+```
+
