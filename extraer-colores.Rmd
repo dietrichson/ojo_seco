@@ -1,0 +1,114 @@
+---
+title: "extraer_colores"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Como extraemos los colores?
+
+```{r}
+
+library(magick)
+my_image <- image_read("./img/ojo 1.png")
+image_info(my_image)
+my_width <- image_info(my_image)$width
+my_height <- image_info(my_image)$height
+
+my_raster <- as.raster(my_image)
+dim(my_raster)
+my_width
+my_height
+
+my_vec <- as.vector(my_raster)
+```
+
+## Cuantos colores tenemos?
+
+```{r}
+my_vec %>% unique %>% length
+my_vec %>% length
+```
+
+
+## Reducir numero de colores
+
+```{r}
+my_image_reduced <- image_quantize(
+  my_image,
+  max=256
+)
+```
+
+Vemos como quedó
+```{r}
+my_image_reduced
+```
+
+
+```{r}
+my_image_reduced %>% as.raster() %>% unique() %>% length()
+```
+
+
+## Intentando mas variantes
+```{r}
+my_image_reduced_16 <- image_quantize(
+  my_image,
+  max=16
+)
+```
+
+```{r}
+plot(
+  
+my_image_reduced_16
+)
+
+plot(my_image)
+```
+
+Suficiente?
+
+```{r}
+my_image_reduced_16 %>% as.raster() %>% unique()
+```
+
+
+
+```{r}
+my_vec <- as.raster(my_image_reduced_16) %>% as.vector()
+```
+
+```{r}
+#replazar uno de los colores al hazar y reconstituir la imagen
+my_vec <-  ifelse(my_vec == "#5c7559ff","#5c755900",my_vec)
+
+```
+
+
+Reconstituir
+```{r}
+my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec)
+```
+
+```{r}
+as.raster(my_matrix) %>% plot()
+```
+
+No exactamente...
+
+```{r}
+my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec,byrow = TRUE)
+as.raster(my_matrix) %>% plot()
+```
+```{r}
+my_vec <- as.raster(my_image_reduced_16) %>% as.vector()
+#replazar uno de los colores al hazar y reconstituir la imagen
+my_vec <-  ifelse(my_vec == "#5c7559ff","#FF0000FF",my_vec)
+my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec, byrow = TRUE)
+as.raster(my_matrix) %>% plot()
+```
+

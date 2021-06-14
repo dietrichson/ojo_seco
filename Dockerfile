@@ -14,7 +14,8 @@ RUN install2.r magick \
                anytime \
                ggthemes \
                bookdown \
-               optparse
+               optparse \
+               png
 
 RUN apt-get install wget
 RUN wget https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-1.4.1717-amd64.deb
