@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Como extraemos los colores?
 
 ```{r}
-
 library(magick)
 my_image <- image_read("./img/ojo 1.png")
 image_info(my_image)
@@ -24,6 +23,11 @@ my_height
 
 my_vec <- as.vector(my_raster)
 ```
+
+```{r}
+my_vec %>% head(10)
+```
+
 
 ## Cuantos colores tenemos?
 
@@ -44,6 +48,7 @@ my_image_reduced <- image_quantize(
 
 Vemos como quedó
 ```{r}
+my_image
 my_image_reduced
 ```
 
@@ -83,7 +88,7 @@ my_vec <- as.raster(my_image_reduced_16) %>% as.vector()
 ```
 
 ```{r}
-#replazar uno de los colores al hazar y reconstituir la imagen
+#replazar uno de los colores al azar y reconstituir la imagen
 my_vec <-  ifelse(my_vec == "#5c7559ff","#5c755900",my_vec)
 
 ```
@@ -91,7 +96,7 @@ my_vec <-  ifelse(my_vec == "#5c7559ff","#5c755900",my_vec)
 
 Reconstituir
 ```{r}
-my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec)
+my_matrix <- matrix(ncol=my_width, nrow=my_height, data = my_vec)
 ```
 
 ```{r}
@@ -101,7 +106,7 @@ as.raster(my_matrix) %>% plot()
 No exactamente...
 
 ```{r}
-my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec,byrow = TRUE)
+my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec, byrow = TRUE)
 as.raster(my_matrix) %>% plot()
 ```
 ```{r}
@@ -109,6 +114,80 @@ my_vec <- as.raster(my_image_reduced_16) %>% as.vector()
 #replazar uno de los colores al hazar y reconstituir la imagen
 my_vec <-  ifelse(my_vec == "#5c7559ff","#FF0000FF",my_vec)
 my_matrix <- matrix(ncol=my_width,nrow=my_height,data = my_vec, byrow = TRUE)
+as.raster(my_matrix) %>% plot()
+```
+
+
+```{r}
+image_modulate(my_image, brightness = 110, saturation = 70, hue = 70) -> my_image_modulated
+```
+
+
+```{r}
+my_image_modulated %>% as.raster() %>% as.vector() %>% unique() %>% length()
+```
+
+```{r}
+my_image %>% 
+  as.raster() %>% 
+  as.vector() %>% 
+  unique( ) %>% 
+  length()
+```
+
+
+
+```{r}
+image_modulate(my_image, brightness = 110, saturation = 100, hue = 200)
+```
+
+```{r}
+image_modulate(my_image, brightness = 100, saturation = 100, hue = 100) %>% 
+  as.raster() %>% 
+  as.vector() %>% 
+  unique() %>% 
+  length()
+```
+
+```{r}
+image_modulate(my_image, brightness = 110, saturation = 70, hue = 70) %>% 
+  image_quantize(max = 16) -> imagen_2
+  
+```
+
+```{r}
+imagen_2 %>% 
+  as.raster() %>% 
+  as.vector() -> vec_2
+```
+
+
+```{r}
+vec_2 %>% unique()
+```
+
+```{r}
+imagen_2 %>% 
+  as.raster() %>% 
+  as.vector() -> vec_2
+vec_2 <-  ifelse(vec_2 == "#713c54ff","#5c755900",vec_2)
+vec_2 <-  ifelse(vec_2 == "#382629ff","#5c755900",vec_2)
+vec_2 <-  ifelse(vec_2 == "#696d54ff","#5c755900",vec_2)
+vec_2 <-  ifelse(vec_2 == "#a9828aff","#5c755900",vec_2)
+vec_2 <-  ifelse(vec_2 == "#ada496ff","#5c755900",vec_2)
+vec_2 <-  ifelse(vec_2 == "#56ab4eff","#5c755900",vec_2)
+#vec_2 <-  ifelse(vec_2 == "#696d54ff","#5c755900",vec_2)
+#vec_2 <-  ifelse(vec_2 == "#a7cf9dff","#5c755900",vec_2)
+#vec_2 <-  ifelse(vec_2 == "#a25479ff","#5c755900",vec_2)
+#vec_2 <-  ifelse(vec_2 == "#c56e97ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#99d792ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#c4d0b5ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#55c953ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#e3b0c3ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#f8f5f1ff","#5c755900",vec_2)
+# vec_2 <-  ifelse(vec_2 == "#cca0abff","#5c755900",vec_2)
+
+my_matrix <- matrix(ncol=my_width,nrow=my_height,data = vec_2, byrow = TRUE)
 as.raster(my_matrix) %>% plot()
 ```
 
